@@ -5,6 +5,14 @@ fn main() {
         .version("0.0.1")
         .author("Marios Mitsios <xrteach@hotmail.com>")
         .arg_required_else_help(true)
+        .propagate_version(true)
+        .help_template("\
+{before-help}{name} {version}
+{author-with-newline}{about-with-newline}
+{usage-heading} {usage}
+
+{all-args}{after-help}
+")
         .subcommand_required(true)
         .subcommand(
             clap::Command::new("new").about("Creates a Todo").args([
