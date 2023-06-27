@@ -1,8 +1,9 @@
 use clap::parser::ArgMatches;
 
-use crate::todo::{Todo, get_todo_list};
+use crate::todo::{get_todo_list, Todo};
 
 pub fn new_todo(args: &ArgMatches) {
+    log::info!("Subcommand: NEW");
     let new_index = match get_todo_list().last().unwrap().parse::<u8>() {
         Ok(i) => i,
         Err(e) => {
