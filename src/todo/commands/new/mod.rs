@@ -1,35 +1,9 @@
 use clap::parser::ArgMatches;
 
-use crate::todo::Todo;
-
-fn read_todos() -> Vec<String> {
-    log::info!("Searching for existing todos");
-    let directory_result = std::fs::read_dir("./todos");
-    let files = match directory_result {
-        Ok(dir) => {
-            log::info!("Todos found");
-            dir.map(|f| f.unwrap().path())
-        }
-        Err(e) => {
-            log::error!("Error get todo files! {}", e);
-            panic!("{}", e)
-        }
-    };
-
-    log::info!("Getting todo list");
-    files
-        .map(|f| {
-            f.file_name()
-                .unwrap()
-                .to_str()
-                .unwrap()
-                .replace(".toml", "")
-        })
-        .collect()
-}
+use crate::todo::{Todo, get_todo_list};
 
 pub fn new_todo(args: &ArgMatches) {
-    let new_index = match read_todos().last().unwrap().parse::<u8>() {
+    let new_index = match get_todo_list().last().unwrap().parse::<u8>() {
         Ok(i) => i,
         Err(e) => {
             log::error!("Failed to parse index to u8. {}", e);
