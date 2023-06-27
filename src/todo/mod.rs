@@ -49,7 +49,7 @@ impl Todo {
             format!("./todos/{}.toml", self.index)
         );
 
-        let todoFile = TodoFile {
+        let todo_file = TodoFile {
             todo: Todo::new(
                 self.index,
                 self.name.clone(),
@@ -57,7 +57,7 @@ impl Todo {
                 self.marked,
             ),
         };
-        println!("{}", toml::to_string(&todoFile).unwrap());
+        println!("{}", toml::to_string(&todo_file).unwrap());
 
         let mut file = match std::fs::File::create(format!("./todos/{}.toml", self.index)) {
             Ok(f) => {
@@ -70,7 +70,7 @@ impl Todo {
             }
         };
 
-        match file.write(toml::to_string(&todoFile).unwrap().as_bytes()) {
+        match file.write(toml::to_string(&todo_file).unwrap().as_bytes()) {
             Ok(_) => log::info!("Wrote todo toml file!"),
             Err(e) => {
                 log::error!("Error writing todo toml file! {}", e);

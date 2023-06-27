@@ -64,11 +64,11 @@ fn main() {
 
     log::info!("Matching subcommand");
     match matches.subcommand() {
-        Some(("new", params)) => todo::commands::new::new_todo(params),
+        Some(("new", params)) => crate::todo::commands::new::new_todo(params),
         Some(("mark", _params)) => {}
         Some(("edit", _params)) => {}
         Some(("delete", _params)) => {}
-        Some(("list", _params)) => {}
+        Some(("list", _)) => crate::todo::commands::list::list_todos(),
         Some(("search", _params)) => {}
         _ => {
             log::error!("Subcommand wasn't matched");
