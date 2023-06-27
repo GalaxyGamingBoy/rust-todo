@@ -1,7 +1,19 @@
+mod todo;
+
 use clap;
 
 fn main() {
-    let _matches = clap::Command::new("Todo")
+    match simplelog::WriteLogger::init(
+        log::LevelFilter::Info,
+        simplelog::Config::default(),
+        std::fs::File::create("rust-todo.log").unwrap(),
+    ) {
+        Ok(_) => log::info!("Simplelog Initialized"),
+        Err(e) => log::error!("Error Initializing Simplelog: {}", e),
+    };
+
+    log::info!("Starting clap command initialization");
+    let matches = clap::Command::new("Todo")
         .version("0.0.1")
         .author("Marios Mitsios <xrteach@hotmail.com>")
         .arg_required_else_help(true)
@@ -19,7 +31,7 @@ fn main() {
                 clap::arg!([TODO_NAME] "The name of the todo that will be created.")
                     .required(true).value_parser(clap::builder::NonEmptyStringValueParser::new()),
                 clap::arg!(-d --desc <TODO_DESCRIPTION> "The description of the todo that will be created.").default_value(""),
-                clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be created.").value_parser(["yes", "no"])
+                clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be created.").value_parser(["yes", "no"]).default_value("no")
             ]),
         ).subcommand(clap::Command::new("mark").about("Marks a Todo (Default: Toggles the mark)").args([
             clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be marked").value_parser(clap::builder::NonEmptyStringValueParser::new()),
@@ -40,4 +52,27 @@ fn main() {
         .subcommand(clap::Command::new("search").about("Searches all todo titles that include [SEARCH_PARAM]").args([
             clap::arg!([SEARCH_PARAM] "The search paramater"),
         ])).get_matches();
+
+    log::info!("Clap command initialization finished!");
+
+    // Create Todo Directory
+    log::info!("Searching for /todos");
+    match std::fs::create_dir("todos") {
+        Ok(_) => log::info!("/todos not found, creating folder"),
+        Err(_) => log::info!("/todos found, continuing"),
+    };
+
+    log::info!("Matching subcommand");
+    match matches.subcommand() {
+        Some(("new", params)) => todo::commands::new::new_todo(params),
+        Some(("mark", _params)) => {}
+        Some(("edit", _params)) => {}
+        Some(("delete", _params)) => {}
+        Some(("list", _params)) => {}
+        Some(("search", _params)) => {}
+        _ => {
+            log::error!("Subcommand wasn't matched");
+            unreachable!("A subcommand is required");
+        }
+    }
 }

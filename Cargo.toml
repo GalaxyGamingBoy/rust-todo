@@ -7,3 +7,7 @@ edition = "2021"
 
 [dependencies]
 clap = "4.3.8"
+log = "0.4.19"
+serde = { version = "1.0.164", features = ["derive"] }
+simplelog = "0.12.1"
+toml = "0.7.5"
