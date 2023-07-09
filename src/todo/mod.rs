@@ -57,7 +57,6 @@ impl Todo {
                 self.marked,
             ),
         };
-        println!("{}", toml::to_string(&todo_file).unwrap());
 
         let mut file = match std::fs::File::create(format!("./todos/{}.toml", self.index)) {
             Ok(f) => {
