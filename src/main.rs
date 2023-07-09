@@ -34,7 +34,7 @@ fn main() {
                 clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be created.").value_parser(["yes", "no"]).default_value("no")
             ]),
         ).subcommand(clap::Command::new("mark").about("Marks a Todo (Default: Toggles the mark)").args([
-            clap::arg!(-i --index <TODO_INDEX> "The index of the todo that will be marked").required(true),
+            clap::arg!([TODO_INDEX] "The index of the todo that will be marked").required(true),
             clap::arg!(-m --mark <TODO_MARKED> "The mark of the todo").value_parser(["yes", "no"])
         ]))
         .subcommand(clap::Command::new("edit").about("Edits a todo").args([
@@ -64,7 +64,7 @@ fn main() {
     log::info!("Matching subcommand");
     match matches.subcommand() {
         Some(("new", params)) => crate::todo::commands::new::new_todo(params),
-        Some(("mark", _params)) => {}
+        Some(("mark", params)) => crate::todo::commands::mark::mark_todo(params),
         Some(("edit", _params)) => {}
         Some(("delete", _params)) => {}
         Some(("list", _)) => crate::todo::commands::list::list_todos(),
