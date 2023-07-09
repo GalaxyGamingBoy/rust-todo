@@ -78,7 +78,17 @@ impl Todo {
         }
     }
 
-    fn load_from(index: u8) {}
+    fn load_from(index: u8) -> Todo {
+        let todo = match std::fs::read_to_string(format!("./todos/{}.toml", index)) {
+            Ok(s) => s,
+            Err(e) => {
+                log::error!("Error reading file. {}", e);
+                panic!("{}", e)
+            }
+        };
+
+        toml::from_str::<TodoFile>(&todo).unwrap().todo
+    }
 }
 
 pub fn get_todos() -> Vec<PathBuf> {
