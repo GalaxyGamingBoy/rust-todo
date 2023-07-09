@@ -2,9 +2,9 @@ pub mod commands;
 
 use std::{io::Write, path::PathBuf};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Todo {
     index: u8,
     name: String,
@@ -12,7 +12,7 @@ pub struct Todo {
     marked: bool,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct TodoFile {
     todo: Todo,
 }
@@ -109,4 +109,43 @@ pub fn get_todo_list() -> Vec<String> {
                 .replace(".toml", "")
         })
         .collect()
+}
+
+pub fn todo_header() {
+    println!("+---------TODO  TEMPLATE---------+");
+    println!("| (ID) NAME, DESCRIPTION, MARKED |");
+    println!("+------------------------------- +");
+}
+pub fn visualize_todo(todo: Todo) {
+    println!(
+        "({}) {}, {}, {}",
+        todo.index,
+        todo.name,
+        todo.desc,
+        todo.marked
+            .to_string()
+            .replace("false", "NO")
+            .replace("true", "YES")
+    )
+}
+
+pub fn get_todo_tomls() -> Vec<Todo> {
+    log::info!("Getting todo toml list");
+    let files: Vec<String> = get_todos()
+        .iter()
+        .map(|f| match std::fs::read_to_string(f.to_str().unwrap()) {
+            Ok(s) => s,
+            Err(e) => {
+                log::error!("Error reading file. {}", e);
+                panic!("{}", e)
+            }
+        })
+        .collect();
+
+    let todos: Vec<TodoFile> = files
+        .iter()
+        .map(|f| toml::from_str::<TodoFile>(f).unwrap())
+        .collect();
+
+    todos.iter().map(|f| f.todo.clone()).collect()
 }
