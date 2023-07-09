@@ -34,13 +34,12 @@ fn main() {
                 clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be created.").value_parser(["yes", "no"]).default_value("no")
             ]),
         ).subcommand(clap::Command::new("mark").about("Marks a Todo (Default: Toggles the mark)").args([
-            clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be marked").value_parser(clap::builder::NonEmptyStringValueParser::new()),
-            clap::arg!(-i --index <TODO_INDEX> "The index of the todo that will be marked"),
+            clap::arg!(-i --index <TODO_INDEX> "The index of the todo that will be marked").required(true),
             clap::arg!(-m --mark <TODO_MARKED> "The mark of the todo").value_parser(["yes", "no"])
         ]))
         .subcommand(clap::Command::new("edit").about("Edits a todo").args([
             clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be edited").value_parser(clap::builder::NonEmptyStringValueParser::new()),
-            clap::arg!(-i --index <TODO_INDEX> "The index of the todo that will be edited"),
+            clap::arg!(-i --index <TODO_INDEX> "The index of the todo that will be edited").required(true),
             clap::arg!(-d --desc <TODO_DESCRIPTION> "The description of the todo that will be edited.").default_value(""),
             clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be edited.").value_parser(["yes", "no"])
         ]))
