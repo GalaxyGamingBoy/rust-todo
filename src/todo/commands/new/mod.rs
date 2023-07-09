@@ -4,7 +4,7 @@ use crate::todo::{get_todo_list, Todo};
 
 pub fn new_todo(args: &ArgMatches) {
     log::info!("Subcommand: NEW");
-    let new_index = match get_todo_list().last().unwrap().parse::<u8>() {
+    let new_index = match get_todo_list().last().unwrap_or(&String::from("0")).parse::<u8>() {
         Ok(i) => i,
         Err(e) => {
             log::error!("Failed to parse index to u8. {}", e);
