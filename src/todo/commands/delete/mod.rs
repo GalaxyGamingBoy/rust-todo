@@ -1,6 +1,6 @@
 use clap::ArgMatches;
 
-use crate::todo::{get_todo_index, self, Todo};
+use crate::todo::{get_todo_index, Todo};
 
 pub fn delete_mod(args: &ArgMatches) {
     log::info!("Subcommand: DELETE");
@@ -11,19 +11,19 @@ pub fn delete_mod(args: &ArgMatches) {
     log::info!("Getting user approval to delete todo with index: {}", todo_index);
     println!("Are you sure you want to delete the todo with index: *{}* (N/y): ", todo_index);
 
-    let mut userResponse = String::new();
-    std::io::stdin().read_line(&mut userResponse).unwrap();
+    let mut user_response = String::new();
+    std::io::stdin().read_line(&mut user_response).unwrap();
 
-    if !userResponse.contains("y") {
+    if !user_response.contains("y") {
         log::info!("User canceled delete");
         println!("Canceled!");
         std::process::exit(1);
     }
 
     println!("Are you sure, SURE you want to delete the todo with index: *{}* (N/y): ", todo_index);
-    std::io::stdin().read_line(&mut userResponse).unwrap();
+    std::io::stdin().read_line(&mut user_response).unwrap();
     
-    if !userResponse.contains("y") {
+    if !user_response.contains("y") {
         log::info!("User canceled delete");
         println!("Canceled!");
         std::process::exit(1);
