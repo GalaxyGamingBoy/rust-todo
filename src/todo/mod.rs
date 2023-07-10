@@ -95,6 +95,21 @@ impl Todo {
 
         toml::from_str::<TodoFile>(&todo).unwrap().todo
     }
+
+    fn delete(index: u8) {
+        if !Path::new(&format!("./todos/{}.toml", index)).exists() {
+            log::error!("Todo file not found.");
+            panic!("Todo file not found.");
+        }
+
+        match std::fs::remove_file(format!("./todos/{}.toml", index)) {
+            Ok(_) => log::info!("Deleted todo with index: {}", index),
+            Err(e) => {
+                log::error!("Error deleating todo with index: {}. Error: {}", index, e);
+                panic!("{}", e)
+            }
+        };
+    }
 }
 
 pub fn get_todo_index(args: &ArgMatches) -> u8 {
