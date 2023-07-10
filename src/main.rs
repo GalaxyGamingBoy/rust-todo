@@ -39,9 +39,9 @@ fn main() {
         ]))
         .subcommand(clap::Command::new("edit").about("Edits a todo").args([
             clap::arg!([TODO_INDEX] "The index of the todo that will be edited").required(true),
-            clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be edited").value_parser(clap::builder::NonEmptyStringValueParser::new()),
+            clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be edited").value_parser(clap::builder::NonEmptyStringValueParser::new()).default_value("todo"),
             clap::arg!(-d --desc <TODO_DESCRIPTION> "The description of the todo that will be edited.").default_value(""),
-            clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be edited.").value_parser(["yes", "no"])
+            clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be edited.").value_parser(["yes", "no"]).default_value("no")
         ]))
         .subcommand(clap::Command::new("delete").about("Deletes a todo").args([
             clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be deleted").value_parser(clap::builder::NonEmptyStringValueParser::new()),
