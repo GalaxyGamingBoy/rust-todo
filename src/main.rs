@@ -47,9 +47,7 @@ fn main() {
             clap::arg!([TODO_INDEX] "The index of the todo that will be deleted"),
         ]))
         .subcommand(clap::Command::new("list").about("Lists all Todos"))
-        .subcommand(clap::Command::new("search").about("Searches all todo titles that include [SEARCH_PARAM]").args([
-            clap::arg!([SEARCH_PARAM] "The search paramater"),
-        ])).get_matches();
+        .get_matches();
 
     log::info!("Clap command initialization finished!");
 
@@ -67,7 +65,6 @@ fn main() {
         Some(("edit", params)) => crate::todo::commands::edit::edit_todo(params),
         Some(("delete", params)) => crate::todo::commands::delete::delete_mod(params),
         Some(("list", _)) => crate::todo::commands::list::list_todos(),
-        Some(("search", _params)) => {}
         _ => {
             log::error!("Subcommand wasn't matched");
             unreachable!("A subcommand is required");
