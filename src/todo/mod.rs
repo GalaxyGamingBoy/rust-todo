@@ -2,6 +2,7 @@ pub mod commands;
 
 use std::{io::Write, path::PathBuf};
 
+use clap::ArgMatches;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -88,6 +89,16 @@ impl Todo {
         };
 
         toml::from_str::<TodoFile>(&todo).unwrap().todo
+    }
+}
+
+pub fn get_todo_index(args: &ArgMatches) -> u8 {
+    match args.get_one::<String>("TODO_INDEX").unwrap().parse::<u8>() {
+        Ok(index) => index,
+        Err(e) => {
+            log::error!("Failed to parse index to u8. {}", e);
+            panic!("{}", e);
+        }
     }
 }
 
