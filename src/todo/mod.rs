@@ -1,8 +1,8 @@
 pub mod commands;
 
-use std::{io::Write, path::PathBuf};
+use std::{io::Write, path::{PathBuf, Path}};
 
-use clap::ArgMatches;
+use clap::{ArgMatches};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -80,6 +80,11 @@ impl Todo {
     }
 
     fn load_from(index: u8) -> Todo {
+        if !Path::new(&format!("./todos/{}.toml", index)).exists() {
+            log::error!("Todo file not found.");
+            panic!("Todo file not found.");
+        }
+
         let todo = match std::fs::read_to_string(format!("./todos/{}.toml", index)) {
             Ok(s) => s,
             Err(e) => {
@@ -168,4 +173,15 @@ pub fn get_todo_tomls() -> Vec<Todo> {
         .collect();
 
     todos.iter().map(|f| f.todo.clone()).collect()
+}
+
+
+pub fn string_to_bool(value: String) -> bool {
+    match value.replace("yes", "true").replace("no", "false").parse::<bool>() {
+        Ok(v) => v,
+        Err(e) => {
+            log::error!("Error while changing string {} to boolean. Error: {}", value, e);
+            panic!("{}", e);
+        }
+    }
 }
