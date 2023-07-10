@@ -44,8 +44,7 @@ fn main() {
             clap::arg!(-m --mark <TODO_MARKED> "The completion status if the todo that will be edited.").value_parser(["yes", "no"]).default_value("no")
         ]))
         .subcommand(clap::Command::new("delete").about("Deletes a todo").args([
-            clap::arg!(-n --name <TODO_NAME> "The name of the todo that will be deleted").value_parser(clap::builder::NonEmptyStringValueParser::new()),
-            clap::arg!(-i --index <TODO_INDEX> "The index of the todo that will be deleted"),
+            clap::arg!([TODO_INDEX] "The index of the todo that will be deleted"),
         ]))
         .subcommand(clap::Command::new("list").about("Lists all Todos"))
         .subcommand(clap::Command::new("search").about("Searches all todo titles that include [SEARCH_PARAM]").args([
@@ -66,7 +65,7 @@ fn main() {
         Some(("new", params)) => crate::todo::commands::new::new_todo(params),
         Some(("mark", params)) => crate::todo::commands::mark::mark_todo(params),
         Some(("edit", params)) => crate::todo::commands::edit::edit_todo(params),
-        Some(("delete", _params)) => {}
+        Some(("delete", params)) => crate::todo::commands::delete::delete_mod(params),
         Some(("list", _)) => crate::todo::commands::list::list_todos(),
         Some(("search", _params)) => {}
         _ => {
