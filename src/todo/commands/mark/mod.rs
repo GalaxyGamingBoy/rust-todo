@@ -1,18 +1,12 @@
 use clap::parser::ArgMatches;
 
-use crate::todo::Todo;
+use crate::todo::{Todo, get_todo_index};
 
 
 pub fn mark_todo(args: &ArgMatches) {
     log::info!("Subcommand: MARK");
-    let todo_index = match args.get_one::<String>("TODO_INDEX").unwrap().parse::<u8>() {
-        Ok(index) => index,
-        Err(e) => {
-            log::error!("Failed to parse index to u8. {}", e);
-            panic!("{}", e);
-        }
-    };
-
+    
+    let todo_index = get_todo_index(args);
     let mut todo = Todo::load_from(todo_index);
     todo.toggle_marked();
     todo.save();
